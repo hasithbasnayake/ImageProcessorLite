@@ -10,15 +10,29 @@ void math_px(unsigned char* p, int val) {
 
 extern "C" {
     EMSCRIPTEN_KEEPALIVE
-    void brighten_img(unsigned char* editable_img, size_t img_size) {
+    void brightness_img(unsigned char* editable_img, int px_val, size_t img_size) {
         for (unsigned char* p = editable_img; p !=editable_img + img_size; p++) {
-            math_px(p, 100);
+            math_px(p, px_val);
+        }
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    void grayscale_img(unsigned char* editable_img, size_t img_size, int channels) {
+        for (unsigned char* p = editable_img; p != editable_img + img_size; p += channels) {
+            uint8_t px_grayscale = (uint8_t)(0.21 * *p + 0.72 * *(p+1) + 0.07 * *(p+2));
+            *p = *(p+1) = *(p+2) = px_grayscale;
+        }
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    void invert_img(unsigned char* editable_img, size_t img_size) {
+        for (unsigned char* p = editable_img; p !=editable_img + img_size; p++) {
+            *p = 255 - *p;
         }
     }
 
     EMSCRIPTEN_KEEPALIVE
     void convolve_img(unsigned char* editable_img, unsigned char* output_img, float* kernel, int kernel_size, int img_height, int img_width) {
-
         int kernel_half = kernel_size / 2;
 
         for (int y = 0; y < img_height; y++) {
