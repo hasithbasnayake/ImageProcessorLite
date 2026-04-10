@@ -45,6 +45,6 @@
 *.png
 stb_image/
 imageProcessor
-*.js
-*.css
-*.html
+.vscode
+output.js
+output.wasm
