@@ -16,14 +16,29 @@ async function upload() {
 
     const numBytes = imageData.data.length;
     const ptr = Module._malloc(numBytes);
+    const output_ptr = Module._malloc(numBytes);
 
     Module.HEAPU8.set(imageData.data, ptr);
 
-    Module._brighten_img(ptr, numBytes);
+    const blurKernel = new Float32Array([
+    -1, -1, -1,
+    -1,  8, -1,
+    -1, -1, -1
+    ]);
 
-    imageData.data.set(Module.HEAPU8.subarray(ptr, ptr + numBytes));
+    const kernelBytes = blurKernel.length * blurKernel.BYTES_PER_ELEMENT;
+    const kernel_ptr = Module._malloc(kernelBytes);
+
+    Module.HEAPF32.set(blurKernel, kernel_ptr / 4);
+
+    Module._convolve_img(ptr, output_ptr, kernel_ptr, 3, canvas.height, canvas.width);
+
+    imageData.data.set(Module.HEAPU8.subarray(output_ptr, output_ptr + numBytes));
 
     Module._free(ptr);
+    Module._free(output_ptr);
+    Module._free(kernel_ptr)
+
 
     console.log(imageData);
 
