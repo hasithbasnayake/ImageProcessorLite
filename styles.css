@@ -1,0 +1,82 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 800px;
+
+}
+
+main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+h1 {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    color: #737373;
+    font-size: 18px;
+}
+
+a {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    color: #737373;
+    font-size: 12px;
+    text-decoration: underline;
+}
+
+.canvas-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.nav-header {
+    font-family: "Karla", sans-serif;
+    font-size: 14px;
+}
+
+.nav-link {
+    font-family: "Inter", sans-serif;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+}
+
+.github-link {
+    font-family: "Inter", sans-serif;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+}
+
+.drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  height: 300px;
+  padding: 1em;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  color: slategray;
+  cursor: pointer;
+}
