@@ -2,19 +2,40 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>C++ Test Site</title>
+        <title>Image Processor</title>
+        <link rel="stylesheet" href="styles.css">
+   
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">     
     </head>
     <body>
         <script src="script.js"></script>
         <script src="output.js"></script>
-        <H1>C++ Test Site</H1>
-        <input
-            class="file-uploader"
-            type="file"
-            onchange="upload()"
-            accept="image/*"
-        />
-        <p>Testing WASM functionality</p>
-        <canvas id="output-canvas" width="1200", height="1600"></canvas>
+
+        <section class="page-content">
+        <header>
+            <div class="title">
+                <h1>A Simple Image Processor</h1>
+                <a>github.com/ImageProcessorLite</a>
+            </div>
+            <div class="page-toggle"></div>
+        </header>
+        <main>
+            <canvas class="drop-zone"></canvas>
+            <div class="canvas-controls">
+                <div class="reset-button-wrapper">
+                    <button type="button">Click Me!</button>
+                </div>
+                <div class="image-button-wrapper">
+                    <button type="button">Blur</button>
+                    <button type="button">Filter</button>
+                    <button type="button">Brighten</button>
+                    <button type="button">Download</button>
+                </div>
+            </div>
+        </main>
+        </section>
     </body>
 </html>
+
