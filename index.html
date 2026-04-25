@@ -2,19 +2,66 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>C++ Test Site</title>
-    </head>
+        <title>Image Processor</title>
+        <link rel="stylesheet" href="styles.css">
+   
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />    </head>
     <body>
         <script src="script.js"></script>
         <script src="output.js"></script>
-        <H1>C++ Test Site</H1>
-        <input
-            class="file-uploader"
-            type="file"
-            onchange="upload()"
-            accept="image/*"
-        />
-        <p>Testing WASM functionality</p>
-        <canvas id="output-canvas" width="1200", height="1600"></canvas>
+
+        <section class="page-content">
+        <header>
+            <div class="title">
+                <h1>A Simple Image Processor</h1>
+                <a href="https://github.com/hasithbasnayake/ImageProcessorLite" target="_blank">github.com/ImageProcessorLite</a>
+            </div>
+            <div class="page-toggle"></div>
+        </header>
+        <main>
+            <div class="file-uploader-wrapper">
+                <p>Click to upload an image</p>
+                <input 
+                    class="file-uploader"
+                    type="file"
+                    onchange="uplaod()"
+                    accept="image/x"
+                />
+            </div>
+            <div class="canvas-controls">
+                <div class="image-button-wrapper">
+                    <button class="control-button" type="button">
+                        <span class="material-symbols-outlined">
+                            refresh
+                        </span>
+                    </button>
+                    <div class="vl"></div>
+                    <button class="control-button" type="button">
+                        <span class="material-symbols-outlined">
+                            download
+                        </span>
+                    </button>
+                </div>
+                <div class="image-button-wrapper">
+                    <button class="control-button" type="button">
+                        <span class="material-symbols-outlined">
+                            blur_on
+                        </span>
+                    </button>
+                    <div class="vl"></div>
+                    <button class="control-button" type="button">
+                        <span class="material-symbols-outlined">
+                            invert_colors
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </main>
+        </section>
     </body>
 </html>
+
