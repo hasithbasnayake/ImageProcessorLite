@@ -24,13 +24,14 @@
         </header>
         <main>
             <div class="file-uploader-wrapper">
-                <p>Click to upload an image</p>
+                <p class="prompt">Click to upload an .png image</p>
                 <input 
                     class="file-uploader"
                     type="file"
-                    onchange="uplaod()"
-                    accept="image/x"
+                    onchange="upload()"
+                    accept="image/png"
                 />
+                <canvas class="image-preview" hidden></canvas>
             </div>
             <div class="canvas-controls">
                 <div class="image-button-wrapper">
