@@ -25,9 +25,11 @@ extern "C" {
     }
 
     EMSCRIPTEN_KEEPALIVE
-    void invert_img(unsigned char* editable_img, size_t img_size) {
-        for (unsigned char* p = editable_img; p !=editable_img + img_size; p++) {
+    void invert_img(unsigned char* editable_img, size_t img_size, int channels) {
+        for (unsigned char* p = editable_img; p !=editable_img + img_size; p+= channels) {
             *p = 255 - *p;
+            *(p+1) = 255 - *(p+1);
+            *(p+2) = 255 - *(p+2);            
         }
     }
 

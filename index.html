@@ -11,8 +11,8 @@
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />    </head>
     <body>
-        <script src="script.js"></script>
         <script src="output.js"></script>
+        <script type="module" src="script.js"></script>
 
         <section class="page-content">
         <header>
@@ -24,36 +24,36 @@
         </header>
         <main>
             <div class="file-uploader-wrapper">
-                <p>Click to upload an image</p>
+                <p class="prompt">Click to upload an .png image</p>
                 <input 
                     class="file-uploader"
                     type="file"
-                    onchange="uplaod()"
-                    accept="image/x"
+                    accept="image/png"
                 />
+                <canvas class="image-preview" hidden></canvas>
             </div>
             <div class="canvas-controls">
                 <div class="image-button-wrapper">
-                    <button class="control-button" type="button">
+                    <button class="control-button refresh-button" type="button">
                         <span class="material-symbols-outlined">
                             refresh
                         </span>
                     </button>
                     <div class="vl"></div>
-                    <button class="control-button" type="button">
+                    <button class="control-button download-button" type="button">
                         <span class="material-symbols-outlined">
                             download
                         </span>
                     </button>
                 </div>
                 <div class="image-button-wrapper">
-                    <button class="control-button" type="button">
+                    <button class="control-button blur-on-button" type="button">
                         <span class="material-symbols-outlined">
                             blur_on
                         </span>
                     </button>
                     <div class="vl"></div>
-                    <button class="control-button" type="button">
+                    <button class="control-button invert-button" type="button">
                         <span class="material-symbols-outlined">
                             invert_colors
                         </span>
