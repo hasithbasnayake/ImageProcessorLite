@@ -53,11 +53,9 @@ function invertImage() {
     if (!image) {
         console.log("Image not uploaded")
         return null
-        // Fill in with logic to trigger a state change to cause a tooltip to appear off the button
     }
 
     Module._invert_img(img_ptr, numBytes, 4);
-
     imageData.data.set(Module.HEAPU8.subarray(img_ptr, img_ptr + numBytes));
 
     ctx.putImageData(imageData, 0, 0)
