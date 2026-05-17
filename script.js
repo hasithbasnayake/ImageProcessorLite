@@ -2,11 +2,36 @@ let Module = await createModule();
 let numBytes = null;
 let img_ptr = null; 
 let backup_img_ptr = null;
-let img_size = null;
+let img_height = null;
+let img_width = null;
 let imageData = null;
 
+// const blurKernel = new Float32Array([
+//     -1, -1, -1,
+//     -1,  8, -1,
+//     -1, -1, -1
+//     ]);
+// const kernel_size = 3;
+
+const blurKernel = new Float32Array([
+    2/159,  4/159,  5/159,  4/159, 2/159,
+    4/159,  9/159, 12/159,  9/159, 4/159,
+    5/159, 12/159, 15/159, 12/159, 5/159,
+    4/159,  9/159, 12/159,  9/159, 4/159,
+    2/159,  4/159,  5/159,  4/159, 2/159,
+]);
+const kernel_size = 5;
+const kernelBytes = blurKernel.length * blurKernel.BYTES_PER_ELEMENT;
+const kernel_ptr = Module._malloc(kernelBytes);
+Module.HEAPF32.set(blurKernel, kernel_ptr / 4);
+
+// Define eventListeners and attach image manipulation functions
 document.querySelector('.file-uploader').addEventListener('change', upload);
 document.querySelector('.invert-button').addEventListener('click', invertImage);
+document.querySelector('.grayscale-button').addEventListener('click', grayscaleImage);
+document.querySelector('.blur-button').addEventListener('click', blurImage);
+document.querySelector('.reset-button').addEventListener('click', resetImage);
+
 
 async function upload() {
 
@@ -32,6 +57,8 @@ async function upload() {
     prompt.hidden = true;
 
     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    img_height = canvas.height; 
+    img_width = canvas.width; 
     numBytes = imageData.data.length;
 
     img_ptr = Module._malloc(numBytes);
@@ -42,93 +69,76 @@ async function upload() {
 
 }      
 
-function invertImage() {
+function saveImage () {
+    return null
+}
 
-    const canvas = document.querySelector('.image-preview');
-    const ctx = canvas.getContext('2d');
-    
+function resetImage() {
+
+    if (returnImage()) {
+        const canvas = document.querySelector('.image-preview');
+        const ctx = canvas.getContext('2d');
+
+        imageData.data.set(Module.HEAPU8.subarray(backup_img_ptr, backup_img_ptr + numBytes));
+        ctx.putImageData(imageData, 0, 0);
+    }
+}
+
+function returnImage() {
+
     const fileUploadInput = document.querySelector('.file-uploader');
     const image = fileUploadInput.files[0];
 
     if (!image) {
-        console.log("Image not uploaded")
-        return null
+        return false
     }
-
-    Module._invert_img(img_ptr, numBytes, 4);
-    imageData.data.set(Module.HEAPU8.subarray(img_ptr, img_ptr + numBytes));
-
-    ctx.putImageData(imageData, 0, 0)
+    return true
 
 }
 
-//     imageData.data.set(Module.HEAPU8.subarray(output_ptr, output_ptr + numBytes));
+function blurImage() {
 
-//     Module._free(ptr);
-//     Module._free(output_ptr);
-//     Module._free(kernel_ptr)
+    if (returnImage()) {
+        const canvas = document.querySelector('.image-preview');
+        const ctx = canvas.getContext('2d');
 
+        const out_ptr = Module._malloc(numBytes)
 
-//     console.log(imageData);
+        Module._convolve_img(img_ptr, out_ptr, kernel_ptr, kernel_size, img_height, img_width);
+        imageData.data.set(Module.HEAPU8.subarray(out_ptr, out_ptr + numBytes));
+        ctx.putImageData(imageData, 0, 0);
 
-//     const output_canvas = document.getElementById('output-canvas');
-//     const output_ctx = output_canvas.getContext('2d');
-//     output_ctx.putImageData(imageData, 0, 0)
+        Module.HEAPU8.copyWithin(img_ptr, out_ptr, out_ptr + numBytes);
+        Module._free(out_ptr);
+    }
 
-    // try {
+}
 
-    //     const Module = await createModule();
+function grayscaleImage() {
 
-    // }
+    if (returnImage()) {
+        const canvas = document.querySelector('.image-preview');
+        const ctx = canvas.getContext('2d');
 
+        Module._grayscale_img(img_ptr, numBytes, 4);
+        imageData.data.set(Module.HEAPU8.subarray(img_ptr, img_ptr + numBytes));
+        ctx.putImageData(imageData, 0 , 0);
+    }
 
+}
 
-// async function upload() {
+function invertImage() {
 
-//     const fileUploadInput = document.querySelector('.file-uploader');
-//     const image = fileUploadInput.files[0];
-
-//     const bitmap = await createImageBitmap(image);
-//     const canvas = document.createElement('canvas');
-//     canvas.width = bitmap.width; 
-//     canvas.height = bitmap.height;
-
-//     const ctx = canvas.getContext('2d');
-//     ctx.drawImage(bitmap, 0, 0);
-//     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-//     const Module = await createModule();
-
-//     const numBytes = imageData.data.length;
-//     const ptr = Module._malloc(numBytes);
-//     const output_ptr = Module._malloc(numBytes);
-
-//     Module.HEAPU8.set(imageData.data, ptr);
-
-//     const blurKernel = new Float32Array([
-//     -1, -1, -1,
-//     -1,  8, -1,
-//     -1, -1, -1
-//     ]);
-
-//     const kernelBytes = blurKernel.length * blurKernel.BYTES_PER_ELEMENT;
-//     const kernel_ptr = Module._malloc(kernelBytes);
-
-//     Module.HEAPF32.set(blurKernel, kernel_ptr / 4);
-
-//     Module._convolve_img(ptr, output_ptr, kernel_ptr, 3, canvas.height, canvas.width);
-
-//     imageData.data.set(Module.HEAPU8.subarray(output_ptr, output_ptr + numBytes));
-
-//     Module._free(ptr);
-//     Module._free(output_ptr);
-//     Module._free(kernel_ptr)
-
-
-//     console.log(imageData);
-
-//     const output_canvas = document.getElementById('output-canvas');
-//     const output_ctx = output_canvas.getContext('2d');
-//     output_ctx.putImageData(imageData, 0, 0)
-
-// }
+    if (returnImage()) {
+        const canvas = document.querySelector('.image-preview');
+        const ctx = canvas.getContext('2d');
+        
+        Module._invert_img(img_ptr, numBytes, 4);
+        imageData.data.set(Module.HEAPU8.subarray(img_ptr, img_ptr + numBytes));
+        ctx.putImageData(imageData, 0, 0)
+    }
+    else {
+        // render tooltip 
+        console.log("Image not uploaded");
+    }
+}
