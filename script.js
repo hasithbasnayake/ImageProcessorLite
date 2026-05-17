@@ -31,7 +31,7 @@ document.querySelector('.invert-button').addEventListener('click', invertImage);
 document.querySelector('.grayscale-button').addEventListener('click', grayscaleImage);
 document.querySelector('.blur-button').addEventListener('click', blurImage);
 document.querySelector('.reset-button').addEventListener('click', resetImage);
-
+document.querySelector('.save-button').addEventListener('click', saveImage);
 
 async function upload() {
 
@@ -70,8 +70,20 @@ async function upload() {
 }      
 
 function saveImage () {
-    return null
+    if (returnImage()) {
+        const canvas = document.querySelector('.image-preview');
+        canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'edited.png';
+        a.click();
+        URL.revokeObjectURL(url);
+    }, 'image/png');
+    }
 }
+
+
 
 function resetImage() {
 
@@ -80,7 +92,9 @@ function resetImage() {
         const ctx = canvas.getContext('2d');
 
         imageData.data.set(Module.HEAPU8.subarray(backup_img_ptr, backup_img_ptr + numBytes));
+        Module.HEAPU8.copyWithin(img_ptr, backup_img_ptr, backup_img_ptr + numBytes);
         ctx.putImageData(imageData, 0, 0);
+
     }
 }
 
